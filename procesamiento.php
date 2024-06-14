@@ -43,6 +43,20 @@ function actualizarProducto($productos, $valor, $nombre, $cant, $modelo) {
     return $productos;
 }
 
+function filtrarProducto($productos, $valor, $nombre, $cant, $modelo, $valorM) {
+    $result = '';
+    foreach ($productos as $producto) {
+        if ($producto["valor"] <= $valorM){
+        $result .= "Nombre: " . $producto['nombre'] . ", valor: " . $producto['valor'] . ", modelo: " . $producto["modelo"] . ", cantidad: " .$producto["cant"] ."<br>";
+        return $result;
+        }
+    }
+    if ($result === ""){
+        return "No existen productos con un valor o igual al ingresado.<br>";
+    }
+    return $result;
+}
+
 // Inicializar el array de usuarios en la sesión
 if (!isset($_SESSION['productos'])) {
     $_SESSION['productos'] = []; 
@@ -57,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cant = $_POST['cant'] ?? '';
     $valor = $_POST["valor"] ?? "";
     $modelo = $_POST['modelo'] ?? '';
+    $modelo = $_POST['valorM'] ?? '';
 
     switch ($accion) {
         case 'agregar':

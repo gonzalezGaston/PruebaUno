@@ -26,6 +26,9 @@ if (isset($_SESSION['resultado'])) {
         <label for="valor">Valor:</label>
         <input type="number" id="valor" name="valor"><br>
 
+        <label for="valorM">Valor Maximo:</label>
+        <input type="number" id="valorM" name="valorM"><br>
+
         <label for="modelo">Modelo:</label>
         <input type="text" id="modelo" name="modelo"><br>
         
@@ -40,6 +43,9 @@ if (isset($_SESSION['resultado'])) {
         
         <input type="radio" id="actualizar" name="accion" value="actualizar">
         <label for="actualizar">Actualizar</label><br>
+
+        <input type="radio" id="filtrar" name="accion" value="filtrar">
+        <label for="filtrar">filtrar precio Max</label><br>
         
         <input type="submit" value="Enviar">
     </form>
