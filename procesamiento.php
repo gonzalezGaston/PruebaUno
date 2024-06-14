@@ -2,39 +2,41 @@
 session_start();
 
 // Definir las funciones
-function agregarUsuario($usuarios, $nombre, $edad, $email) {
-    $usuarios[] = [
+function agregarProducto($producto, $nombre, $cant, $modelo, $valor) {
+    $producto[] = [
         'nombre' => $nombre,
-        'edad' => $edad,
-        'email' => $email
+        'cant' => $cant,
+        'modelo' => $modelo,
+        "valor" => $valor
     ];
-    return $usuarios;
+    return $producto;
 }
 
-function buscarUsuarioPorEmail($usuarios, $email) {
-    foreach ($usuarios as $usuario) {
-        if ($usuario['email'] == $email) {
-            return "Nombre: " . $usuario['nombre'] . "<br>";
+function buscarProducto($producto, $modelo) {
+    foreach ($producto as $producto) {
+        if ($producto['modelo'] == $modelo) {
+            return "Nombre: " . $producto['nombre'] . ", Modelo: " . $producto["modelo"] . ", Valor: " . $producto["valor"] . "<br>";
         }
     }
-    return "Email no encontrado.<br>";
+    return "Producto no encontrado.<br>";
 }
 
-function mostrarUsuarios($usuarios) {
+function mostrarProductos($producto) {
     $result = '';
-    foreach ($usuarios as $usuario) {
-        $result .= "Nombre: " . $usuario['nombre'] . ", Edad: " . $usuario['edad'] . "<br>";
+    foreach ($producto as $producto) {
+        $result .= "Nombre: " . $producto['nombre'] . ", valor: " . $producto['valor'] . ", modelo" . $producto["modelo"] . ", cantidad: " .$producto["cant"] ."<br>";
         
    
     }
-    return $reult;
+    return $result;
 }
 
-function actualizarUsuario($usuarios, $email, $nombre, $edad) {
-    foreach ($usuarios as &$usuario) {
-        if ($usuario['email'] == $email) {
-            $usuario['nombre'] = $nombre;
-            $usuario['edad'] = $edad;
+function actualizarProducto($producto, $valor, $nombre, $cant) {
+    foreach ($producto as &$producto) {
+        if ($producto['modelo'] == $modelo) {
+            $producto['nombre'] = $nombre;
+            $producto["valor"] = $valor;
+            $producto['cant'] = $cant;
             break;
         }
     }
@@ -42,40 +44,41 @@ function actualizarUsuario($usuarios, $email, $nombre, $edad) {
 }
 
 // Inicializar el array de usuarios en la sesión
-if (!isset($_SESSION['usuarios'])) {
-    $_SESSION['usuarios'] = [];
+if (!isset($_SESSION['producto'])) {
+    $_SESSION['producto'] = []; 
 }
 
-$usuarios = $_SESSION['usuarios'];
+$usuarios = $_SESSION['producto'];
 $resultado = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'];
     $nombre = $_POST['nombre'] ?? '';
-    $edad = $_POST['edad'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $cant = $_POST['cant'] ?? '';
+    $valor = $_POST["valor"] ?? "";
+    $modelo = $_POST['modelo'] ?? '';
 
     switch ($accion) {
         case 'agregar':
-            $usuarios = agregarUsuario($usuarios, $nombre, $edad, $email);
-            $resultado = "Usuario agregado correctamente.<br>";
+            $usuarios = agregarProducto($producto, $nombre, $cant, $modelo, $valor);
+            $resultado = "producto agregado correctamente.<br>";
             break;
         
         case 'buscar':
-            $resultado = buscarUsuarioPorEmail($usuarios, $email);
+            $resultado = buscarProducto($usuarios, $modelo);
             break;
         
         case 'mostrar':
-            $resultado = mostrarUsuarios($usuarios);
+            $resultado = mostrarProductos($producto);
             break;
         
         case 'actualizar':
-            $usuarios = actualizarUsuario($usuarios, $email, $nombre, $edad);
-            $resultado = "Usuario actualizado correctamente.<br>";
+            $usuarios = actualizarProducto($producto, $modelo, $nombre, $cant);
+            $resultado = "Producto actualizado correctamente.<br>";
             break;
 
         case 'limpiar':
-            $_SESSION['usuarios'] = [];
+            $_SESSION['producto'] = [];
             $resultado = "Resultados limpiados correctamente.<br>";
             session_destroy();
             break;
@@ -84,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultado = "Acción no válida.";
     }
 
-    $_SESSION['usuarios'] = $usuarios;
+    $_SESSION['producto'] = $usuarios;
     $_SESSION['resultado'] = $resultado;
 }
 
