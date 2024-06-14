@@ -2,18 +2,18 @@
 session_start();
 
 // Definir las funciones
-function agregarProducto($producto, $nombre, $cant, $modelo, $valor) {
-    $producto[] = [
+function agregarProducto($productos, $nombre, $cant, $modelo, $valor) {
+    $productos[] = [
         'nombre' => $nombre,
         'cant' => $cant,
         'modelo' => $modelo,
         "valor" => $valor
     ];
-    return $producto;
+    return $productos;
 }
 
-function buscarProducto($producto, $modelo) {
-    foreach ($producto as $producto) {
+function buscarProducto($productos, $modelo) {
+    foreach ($productos as $producto) {
         if ($producto['modelo'] == $modelo) {
             return "Nombre: " . $producto['nombre'] . ", Modelo: " . $producto["modelo"] . ", Valor: " . $producto["valor"] . "<br>";
         }
@@ -21,9 +21,9 @@ function buscarProducto($producto, $modelo) {
     return "Producto no encontrado.<br>";
 }
 
-function mostrarProductos($producto) {
+function mostrarProductos($productos) {
     $result = '';
-    foreach ($producto as $producto) {
+    foreach ($productos as $producto) {
         $result .= "Nombre: " . $producto['nombre'] . ", valor: " . $producto['valor'] . ", modelo" . $producto["modelo"] . ", cantidad: " .$producto["cant"] ."<br>";
         
    
@@ -31,8 +31,8 @@ function mostrarProductos($producto) {
     return $result;
 }
 
-function actualizarProducto($producto, $valor, $nombre, $cant) {
-    foreach ($producto as &$producto) {
+function actualizarProducto($productos, $valor, $nombre, $cant, $modelo) {
+    foreach ($productos as &$producto) {
         if ($producto['modelo'] == $modelo) {
             $producto['nombre'] = $nombre;
             $producto["valor"] = $valor;
@@ -40,15 +40,15 @@ function actualizarProducto($producto, $valor, $nombre, $cant) {
             break;
         }
     }
-    return $usuarios;
+    return $productos;
 }
 
 // Inicializar el array de usuarios en la sesión
-if (!isset($_SESSION['producto'])) {
-    $_SESSION['producto'] = []; 
+if (!isset($_SESSION['productos'])) {
+    $_SESSION['productos'] = []; 
 }
 
-$usuarios = $_SESSION['producto'];
+$productos = $_SESSION['productos'];
 $resultado = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -60,25 +60,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'agregar':
-            $usuarios = agregarProducto($producto, $nombre, $cant, $modelo, $valor);
+            $productos = agregarProducto($productos, $nombre, $cant, $modelo, $valor);
             $resultado = "producto agregado correctamente.<br>";
             break;
         
         case 'buscar':
-            $resultado = buscarProducto($usuarios, $modelo);
+            $resultado = buscarProducto($productos, $modelo);
             break;
         
         case 'mostrar':
-            $resultado = mostrarProductos($producto);
+            $resultado = mostrarProductos($productos);
             break;
         
         case 'actualizar':
-            $usuarios = actualizarProducto($producto, $modelo, $nombre, $cant);
+            $productos = actualizarProducto($productos, $modelo, $nombre, $cant, $modelo);
             $resultado = "Producto actualizado correctamente.<br>";
             break;
 
         case 'limpiar':
-            $_SESSION['producto'] = [];
+            $_SESSION['productos'] = [];
             $resultado = "Resultados limpiados correctamente.<br>";
             session_destroy();
             break;
@@ -87,11 +87,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultado = "Acción no válida.";
     }
 
-    $_SESSION['producto'] = $usuarios;
+    $_SESSION['productos'] = $productos;
     $_SESSION['resultado'] = $resultado;
 }
 
 // Redirigir de vuelta a index.php
-header("Location: formulario.php");
+header("Location: formulario.php"); 
 exit();
 ?>
