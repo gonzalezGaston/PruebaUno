@@ -27,7 +27,7 @@ function mostrarUsuarios($usuarios) {
         
    
     }
-    return $result;
+    return $reult;
 }
 
 function actualizarUsuario($usuarios, $email, $nombre, $edad) {
